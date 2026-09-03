@@ -1,4 +1,4 @@
-# KATARA OS v1
+# AVATAR OS v2
 
 Avatar OS uses four independent Discord bots and Hermes profiles over a shared
 source of truth. It tracks weekly quotas, interprets short manual logs, protects
@@ -68,7 +68,8 @@ In #avatar-hub: @Iroh review this week.
 
 1. Morning: log Green, Yellow, or Red plus any sleep/energy information.
 2. During the day: send short completion or deviation messages.
-3. At 01:15: close the day in under 30 seconds.
+3. At 01:15: close the previous operational day in under 30 seconds. Work
+   before the 01:30 Asia/Kolkata cutoff belongs to the previous calendar date.
 4. Sunday: Iroh answers the five review questions and proposes one adjustment.
 5. Katara applies it only after you accept, modify, or reject it.
 
@@ -84,3 +85,18 @@ conflict.
 
 Never repay missed work. Never double tomorrow. Resume at the minimum viable
 version or the next normal block.
+
+## Reliability journal
+
+Explicit observations are recorded in the append-only `journal/events.jsonl`.
+Run `python3 tools/avatar_os.py append ...` to add an event and
+`python3 tools/avatar_os.py reconcile` to publish an atomic snapshot under
+`journal/current`. `rebuild` ignores the checkpoint and regenerates the entire
+snapshot from the journal. Markdown remains the human interface; the journal is
+the recovery and deduplication record.
+
+For the first four weeks, append one `effort_score` event on each used day.
+`journal/current/USEFULNESS.md` reports logging time, prompt response,
+reconciliation delay, corrections, cron success, proposal acceptance, and the
+1–10 reduced-effort score. Remove or simplify rituals that consistently cost
+more effort than they save.

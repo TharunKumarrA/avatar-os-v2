@@ -17,7 +17,7 @@ database:
 runtime:
   nofile_soft_limit: 4096
 agent:
-  max_turns: 150
+  max_turns: 30
   personalities: {}
   reasoning_effort: medium
   verbose: false
@@ -41,7 +41,7 @@ browser:
   use_gateway: false
 tool_loop_guardrails:
   warnings_enabled: true
-  hard_stop_enabled: false
+  hard_stop_enabled: true
   warn_after:
     exact_failure: 2
     same_tool_failure: 3
@@ -114,7 +114,7 @@ telemetry:
   shared_metrics:
     enabled: false
 updates:
-  pre_update_backup: false
+  pre_update_backup: true
   backup_keep: 5
   non_interactive_local_changes: stash
 computer_use:
@@ -141,22 +141,12 @@ platform_toolsets:
     - vision
     - web
   discord:
-    - browser
     - clarify
-    - code_execution
-    - computer_use
-    - cronjob
-    - delegation
     - file
-    - image_gen
     - memory
-    - session_search
     - skills
-    - terminal
     - todo
-    - tts
     - vision
-    - web
   google_chat:
     - hermes-google_chat
   homeassistant:

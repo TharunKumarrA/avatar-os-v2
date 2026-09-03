@@ -36,3 +36,8 @@ node_modules/
 __pycache__/
 .venv/
 
+# Avatar OS generated reconciliation state
+shared/avatar-os/journal/.reconcile.lock
+shared/avatar-os/journal/.current-*
+shared/avatar-os/journal/current
+shared/avatar-os/journal/snapshots/

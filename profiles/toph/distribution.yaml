@@ -1,5 +1,5 @@
 name: avatar-toph
-version: 2.0.0
+version: 2.1.0
 description: "Independent GATE CSE tutor with Shared Context v2 handoffs"
 hermes_requires: ">=0.20.6"
 author: "Tharun"
@@ -19,4 +19,3 @@ env_requires:
   - name: DISCORD_HOME_CHANNEL
     description: "Discord channel ID for gateway lifecycle notices"
     required: true
-

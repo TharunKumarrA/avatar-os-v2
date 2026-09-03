@@ -10,9 +10,9 @@
 
 ## Log
 
-- GATE: 0m
+- GATE: Not logged
 - Gym: Not logged
-- DSA: No
+- DSA: Not logged
 - Fruit: Not logged
 - Protein hits: Not logged
 - Sleep: Not logged

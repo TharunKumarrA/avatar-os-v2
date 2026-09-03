@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate shell syntax
+        run: bash -n scripts/*.sh
+      - name: Validate YAML syntax
+        run: ruby -e 'require "yaml"; ARGV.each { |f| YAML.safe_load(File.read(f), permitted_classes: [], aliases: false) }' profiles/*/{config,distribution,profile}.yaml
+      - name: Validate repository invariants
+        run: python3 scripts/validate.py
+      - name: Run reliability and installer tests
+        run: python3 -m unittest discover -s tests -v
+      - name: Audit secrets
+        run: scripts/audit-secrets.sh

@@ -27,7 +27,11 @@ shared/
   avatar-os/              shared source of truth and handoffs
   memory-seed/            optional curated memory seed, not session history
 scripts/
-  install.sh              clean-machine bootstrap
+  install.sh              preflighted, resumable transactional bootstrap
+  migrate.sh              versioned shared-state migration
+  restore.sh              restore a timestamped installer backup
+  validate.py             repository and policy consistency checks
+  validate_runtime.py     installed token/user/channel checks
   audit-secrets.sh        pre-commit credential and path audit
 ```
 
@@ -57,21 +61,27 @@ To seed the curated user profile and durable memory into all four profiles:
 ./scripts/install.sh --with-memory
 ```
 
-The installer deliberately refuses to overwrite existing profiles. It installs
-Katara, Toph, Sokka, and Iroh as named profiles, copies the shared source of
-truth to `~/.hermes/katara`, and makes Katara the active profile.
+The installer refuses implicit overwrites. It installs Katara, Toph, Sokka, and
+Iroh as named profiles, copies the shared source of truth to
+`~/.hermes/katara`, and makes Katara the active profile. Use `--dry-run` for
+preflight only, `--resume` after a partial installation, or `--repair` to back
+up and reinstall distributions while preserving and migrating personal shared
+state. Every mutating run stores recovery material under
+`~/.hermes/backups/avatar-os/`; restore it with `scripts/restore.sh`.
 
 After installation:
 
 1. Copy each generated `.env.EXAMPLE` to `.env`.
 2. Add the correct, unique `DISCORD_BOT_TOKEN` for that bot.
 3. Set `DISCORD_ALLOWED_USERS` and `DISCORD_HOME_CHANNEL`.
-4. Authenticate the `openai-codex` provider with `hermes model` for each
+4. Run `python3 scripts/validate_runtime.py`; it checks permissions, token
+   uniqueness, and numeric user/channel IDs without printing secrets.
+5. Authenticate the `openai-codex` provider with `hermes model` for each
    profile as needed.
-5. Review the packaged cron jobs with `hermes -p katara cron list` and
+6. Review the packaged cron jobs with `hermes -p katara cron list` and
    `hermes -p iroh cron list`; distribution installation does not execute them.
-6. From the Katara profile, install/start the multiplex gateway.
-7. Run `/reset` once for each Discord bot so its channel-bound skill loads into
+7. From the Katara profile, install/start the multiplex gateway.
+8. Run `/reset` once for each Discord bot so its channel-bound skill loads into
    a fresh session.
 
 The committed Discord channel IDs reproduce Tharun's existing server. Change
