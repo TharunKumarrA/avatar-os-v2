@@ -1,0 +1,60 @@
+{
+  "jobs": [
+    {
+      "id": "a13dde91b74c",
+      "name": "Katara Morning Brief",
+      "prompt": "Act as Katara. Read AGENT_CONTRACTS.md, PROFILE.md, PLAN.md, STATE.md, SHARED_CONTEXT.md, all specialist handoffs, the active weekly file, today's daily log if present, and yesterday only for recovery context. Reconcile newer explicit handoff evidence without double-counting and update SHARED_CONTEXT.md. Create today's log from DAILY_TEMPLATE.md if absent. Use Sokka's readiness rules for health evidence, but keep the response in Katara's morning-brief voice. If mode or readiness is unknown, ask for sleep, energy 1-10, pain or illness, and Green/Yellow/Red choice as the single next action. Never assign repayment work.",
+      "skills": [
+        "avatar-katara",
+        "avatar-sokka",
+        "katara-health"
+      ],
+      "skill": "avatar-katara",
+      "model": "gpt-5.6-luna",
+      "provider": "openai-codex",
+      "script": null,
+      "no_agent": false,
+      "schedule": {
+        "kind": "cron",
+        "expr": "0 9 * * *",
+        "display": "0 9 * * *"
+      },
+      "schedule_display": "0 9 * * *",
+      "repeat": {
+        "times": null,
+        "completed": 0
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "deliver": "discord",
+      "workdir": null
+    },
+    {
+      "id": "1616a3639471",
+      "name": "Katara Daily Close",
+      "prompt": "Act as Katara and run the nightly close. Read AGENT_CONTRACTS.md, PROFILE.md, PLAN.md, STATE.md, SHARED_CONTEXT.md, all specialist handoffs, the active weekly file, and today's daily log. Reconcile newer explicit handoff evidence without double-counting and update SHARED_CONTEXT.md. Ask only for today's still-missing GATE minutes/topic, Gym A/B/skip, DSA session/problems, fruit yes/no, protein hits, sleep plan, energy 1-10, and one deviation or friction. Record only explicit replies. Keep the request under 30 seconds. At 01:30 enforce cutoff and never assign make-up work.",
+      "skills": [
+        "avatar-katara"
+      ],
+      "skill": "avatar-katara",
+      "model": "gpt-5.6-luna",
+      "provider": "openai-codex",
+      "script": null,
+      "no_agent": false,
+      "schedule": {
+        "kind": "cron",
+        "expr": "15 1 * * *",
+        "display": "15 1 * * *"
+      },
+      "schedule_display": "15 1 * * *",
+      "repeat": {
+        "times": null,
+        "completed": 0
+      },
+      "enabled": true,
+      "state": "scheduled",
+      "deliver": "discord",
+      "workdir": null
+    }
+  ]
+}

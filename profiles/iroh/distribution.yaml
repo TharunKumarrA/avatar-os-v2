@@ -1,0 +1,23 @@
+name: avatar-iroh
+version: 2.0.0
+description: "Independent weekly reviewer with Shared Context v2 handoffs"
+hermes_requires: ">=0.20.6"
+author: "Tharun"
+license: "Proprietary"
+distribution_owned:
+  - SOUL.md
+  - config.yaml
+  - profile.yaml
+  - skills/
+  - cron/
+env_requires:
+  - name: DISCORD_BOT_TOKEN
+    description: "Iroh Discord bot token"
+    required: true
+  - name: DISCORD_ALLOWED_USERS
+    description: "Comma-separated Discord user IDs allowed to use Iroh"
+    required: true
+  - name: DISCORD_HOME_CHANNEL
+    description: "Discord channel ID for gateway lifecycle notices"
+    required: true
+
