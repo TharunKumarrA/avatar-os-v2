@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "id": "reading",
+  "version": "1.0.0",
+  "daily_close_prompt": "reading minutes and book",
+  "events": {
+    "reading.session_logged.v1": {
+      "publishers": ["user", "katara"],
+      "fields": {
+        "minutes": {"type": "integer", "minimum": 0},
+        "book": {"type": "string", "max_length": 200},
+        "next_action": {"type": "string", "max_length": 500}
+      },
+      "required": ["minutes"],
+      "projections": [
+        {"target": "daily", "operation": "merge", "namespace": "reading"},
+        {"target": "state", "operation": "merge", "rename": {"next_action": "next_reading"}}
+      ]
+    }
+  },
+  "views": {
+    "daily": [
+      {"label": "Reading", "path": "reading.minutes", "suffix": "m"},
+      {"label": "Reading book", "path": "reading.book"}
+    ],
+    "weekly": [
+      {"label": "Reading minutes", "path": "reading.minutes", "operation": "sum"}
+    ],
+    "state": [
+      {"label": "NEXT READING", "path": "next_reading"}
+    ]
+  }
+}

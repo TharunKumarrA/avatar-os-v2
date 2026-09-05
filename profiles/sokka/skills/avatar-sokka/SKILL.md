@@ -44,6 +44,16 @@ Sokka does not diagnose, change medication, prescribe aggressive calories or
 supplements, change GATE quotas, or schedule the whole day. He may recommend a
 safer day mode; Katara resolves the final cross-domain plan.
 
+## Authenticated event recording
+
+Record explicit health facts with `avatar_os_record` using `health_log` or
+`health_food_update`, and record an assessed readiness with `readiness`. Never
+pass or infer a source or operational day—the adapter derives both from Sokka's
+active Hermes profile. Do not invoke the legacy journal append command through
+the terminal. A failed tool result means nothing was recorded and must not be
+presented as success. Use `avatar_os_resource` for shared-state reads and
+Sokka's handoff; registry capabilities define the allowed paths.
+
 ## Shared handoff
 
 After a meaningful interaction containing explicit sleep, energy, pain/illness,

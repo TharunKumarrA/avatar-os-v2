@@ -4,12 +4,13 @@
 from __future__ import annotations
 
 import argparse
+import json
 import os
 import re
 import stat
 from pathlib import Path
 
-ROLES = ("katara", "toph", "sokka", "iroh")
+REPO_ROOT = Path(__file__).resolve().parents[1]
 ID = re.compile(r"^[0-9]{15,22}$")
 
 
@@ -28,10 +29,16 @@ def read_env(path: Path) -> dict[str, str]:
     return values
 
 
-def validate(root: Path) -> list[str]:
+def validate(root: Path, system_path: Path | None = None) -> list[str]:
     errors, tokens = [], []
-    for role in ROLES:
-        env_path = root / ".env" if role == "katara" else root / "profiles" / role / ".env"
+    system_path = system_path or REPO_ROOT / "registry/system.json"
+    try:
+        agents = json.loads(system_path.read_text(encoding="utf-8"))["agents"]
+    except (OSError, json.JSONDecodeError, KeyError) as exc:
+        return [f"could not load system registry: {exc}"]
+    for agent in agents:
+        role = str(agent["id"])
+        env_path = root / str(agent["env_path"])
         try:
             values = read_env(env_path)
         except ValueError as exc:
@@ -54,8 +61,9 @@ def validate(root: Path) -> list[str]:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--hermes-root", type=Path, default=Path(os.environ.get("HERMES_HOME", "~/.hermes")).expanduser())
+    parser.add_argument("--system", type=Path, default=REPO_ROOT / "registry/system.json")
     args = parser.parse_args()
-    errors = validate(args.hermes_root.resolve())
+    errors = validate(args.hermes_root.resolve(), args.system.resolve())
     if errors:
         for error in errors: print(f"ERROR: {error}")
         return 1

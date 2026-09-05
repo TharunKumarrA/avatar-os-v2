@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "workflows": "workflows.json",
+  "agents": [
+    {"id": "katara", "profile": "profiles/katara", "policy": "policy/roles/katara.md", "env_path": ".env", "coordinator": true, "domains": ["core", "dsa", "gate", "fitness", "reading", "review", "operations"], "capabilities": ["events.publish", "resources.read.shared", "resources.write.coordination"], "toolsets": {"discord": ["avatar-os", "clarify", "memory", "skills", "todo", "vision"]}},
+    {"id": "toph", "profile": "profiles/toph", "policy": "policy/roles/toph.md", "env_path": "profiles/toph/.env", "coordinator": false, "domains": ["gate"], "capabilities": ["events.publish", "resources.read.shared", "resources.write.toph"], "toolsets": {"discord": ["avatar-os", "clarify", "memory", "skills", "todo", "vision"]}},
+    {"id": "sokka", "profile": "profiles/sokka", "policy": "policy/roles/sokka.md", "env_path": "profiles/sokka/.env", "coordinator": false, "domains": ["fitness"], "capabilities": ["events.publish", "resources.read.shared", "resources.write.sokka"], "toolsets": {"discord": ["avatar-os", "clarify", "memory", "skills", "todo", "vision"]}},
+    {"id": "iroh", "profile": "profiles/iroh", "policy": "policy/roles/iroh.md", "env_path": "profiles/iroh/.env", "coordinator": false, "domains": ["review", "gate", "fitness", "dsa", "reading"], "capabilities": ["events.publish", "resources.read.shared", "resources.write.iroh"], "toolsets": {"discord": ["avatar-os", "clarify", "memory", "skills", "todo", "vision"]}}
+  ],
+  "principals": ["user", "automation"],
+  "principal_capabilities": {
+    "user": ["events.publish"],
+    "automation": ["events.publish"]
+  },
+  "resources": {
+    "resources.read.shared": {
+      "read": ["AGENT_CONTRACTS.md", "PROFILE.md", "PLAN.md", "STATE.md", "SHARED_CONTEXT.md", "REVIEW_QUEUE.md", "daily/**", "weekly/**", "handoffs/**", "gate/**", "journal/current/**"]
+    },
+    "resources.write.coordination": {
+      "write": ["PLAN.md", "STATE.md", "SHARED_CONTEXT.md", "REVIEW_QUEUE.md", "daily/**", "weekly/**"]
+    },
+    "resources.write.toph": {
+      "write": ["handoffs/toph.md", "gate/**"]
+    },
+    "resources.write.sokka": {
+      "write": ["handoffs/sokka.md"]
+    },
+    "resources.write.iroh": {
+      "write": ["handoffs/iroh.md", "REVIEW_QUEUE.md", "weekly/**"]
+    }
+  },
+  "skill_mirrors": [
+    ["profiles/katara/skills/avatar-toph/SKILL.md", "profiles/toph/skills/avatar-toph/SKILL.md"],
+    ["profiles/katara/skills/avatar-sokka/SKILL.md", "profiles/sokka/skills/avatar-sokka/SKILL.md"],
+    ["profiles/katara/skills/avatar-iroh/SKILL.md", "profiles/iroh/skills/avatar-iroh/SKILL.md"],
+    ["profiles/katara/skills/katara-health/SKILL.md", "profiles/sokka/skills/katara-health/SKILL.md"]
+  ],
+  "domains": [
+    "domains/core.json",
+    "domains/gate.json",
+    "domains/fitness.json",
+    "domains/dsa.json",
+    "domains/reading.json",
+    "domains/review.json",
+    "domains/operations.json"
+  ]
+}

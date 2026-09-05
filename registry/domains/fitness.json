@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "id": "fitness",
+  "version": "1.0.0",
+  "daily_close_prompt": "Gym A/B/skip, fruit yes/no, and protein hits",
+  "events": {
+    "health_food_update": {
+      "publishers": ["sokka"],
+      "fields": {
+        "exercise_intent": {"type": "string"},
+        "fruit": {"type": "string"},
+        "pain": {"type": "string"},
+        "safety_guidance": {"type": "string"}
+      },
+      "projections": [{"target": "daily", "operation": "merge"}]
+    },
+    "health_log": {
+      "publishers": ["sokka"],
+      "fields": {
+        "gym": {"type": ["string", "boolean"]},
+        "fruit": {"type": ["string", "boolean"]},
+        "protein_hits": {"type": "number", "minimum": 0},
+        "sleep": {"type": "string"},
+        "wake": {"type": "string"},
+        "energy": {"type": "number", "minimum": 1, "maximum": 10},
+        "stress": {"type": "number", "minimum": 1, "maximum": 10},
+        "soreness": {"type": "string"},
+        "illness": {"type": "string"},
+        "deviation": {"type": "string"}
+      },
+      "projections": [{"target": "daily", "operation": "merge"}]
+    },
+    "readiness": {
+      "publishers": ["sokka"],
+      "fields": {
+        "readiness": {"type": "string"},
+        "constraint": {"type": "string"},
+        "next_action": {"type": "string"}
+      },
+      "required": ["readiness"],
+      "projections": [
+        {"target": "daily", "operation": "merge"},
+        {"target": "state", "operation": "merge", "rename": {"constraint": "fitness_constraint", "next_action": "next_fitness"}}
+      ]
+    }
+  },
+  "views": {
+    "daily": [
+      {"label": "Gym", "path": "gym"},
+      {"label": "Fruit", "path": "fruit"},
+      {"label": "Protein hits", "path": "protein_hits"},
+      {"label": "Soreness/pain/illness", "path": "soreness"},
+      {"label": "Exercise intent", "path": "exercise_intent"},
+      {"label": "Pain", "path": "pain"},
+      {"label": "Safety guidance", "path": "safety_guidance"},
+      {"label": "Readiness", "path": "readiness"}
+    ],
+    "weekly": [
+      {"label": "Gym sessions", "path": "gym", "operation": "count_truthy"},
+      {"label": "Fruit days", "path": "fruit", "operation": "count_truthy"},
+      {"label": "Protein hits", "path": "protein_hits", "operation": "sum"}
+    ],
+    "state": [
+      {"label": "NEXT FITNESS", "path": "next_fitness"},
+      {"label": "Readiness", "path": "readiness"}
+    ]
+  }
+}

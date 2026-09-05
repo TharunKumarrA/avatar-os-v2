@@ -1,6 +1,6 @@
 # Avatar OS v2
 
-Private, four-agent Hermes/Discord personal operating system for Tharun.
+Private, registry-driven Hermes/Discord personal operating system for Tharun.
 
 This repository contains four independent Hermes profile distributions:
 
@@ -32,13 +32,84 @@ scripts/
   restore.sh              restore a timestamped installer backup
   validate.py             repository and policy consistency checks
   validate_runtime.py     installed token/user/channel checks
+  deployment_plan.py      read-only repository-to-Hermes change preview
+  render_workflows.py     compile Domain-aware Hermes schedules
+  scaffold.py             plan/create a Domain or Agent
+  avatar_ops.py            inspect generations and atomically roll back
   audit-secrets.sh        pre-commit credential and path audit
+registry/
+  system.json             active agents and domain composition
+  domains/                versioned event, projection, and view definitions
 ```
 
 Hermes distributions represent one profile each, so this repository is a
 monorepo of four valid distributions rather than pretending the stack is one
 agent. The installer invokes the official `hermes profile install` command for
 each profile.
+
+## Extending the system
+
+`registry/system.json` is the desired roster. A Domain manifest defines typed
+Events, authorised publishers, deterministic projections, and rendered Views.
+It can be assigned to one or more Agents without creating another bot. See
+`registry/domains/reading.json` for the first extension beyond Fitness, GATE,
+and DSA. It adds daily, weekly, state, and nightly-close behaviour without
+changing runtime code.
+
+Use the plan-first scaffolder rather than copying files by hand:
+
+```bash
+python3 scripts/scaffold.py domain language-learning --owner katara --plan
+python3 scripts/scaffold.py domain language-learning --owner katara --apply
+python3 scripts/scaffold.py agent bumi --domains gate --plan
+```
+
+Schedules live in `registry/workflows.json`. Domain manifests may contribute a
+bounded `daily_close_prompt`; they cannot replace the workflow's safety,
+identity, timing, or delivery instructions. Regenerate with
+`python3 scripts/render_workflows.py`.
+
+Adding an Agent is a separate choice: give it a Hermes profile and role policy,
+then add it to the registry. Repository rendering, validation, installation,
+restore, and runtime identity checks discover that roster automatically.
+
+The Python layer does not replace or merge either CLI. Hermes still runs
+profiles and Discord; Codex remains the development and administration tool.
+Avatar OS sits between integrations and durable state as the small
+`open`/`apply`/`handle` interface. `apply(..., mode="plan")` previews registry
+changes. Commit mode validates existing events, writes an immutable generation,
+and atomically activates it. No command edits a live `~/.hermes` installation
+unless an operator explicitly runs the installer or migration script.
+
+Before changing an installed system, run:
+
+```bash
+python3 scripts/deployment_plan.py
+```
+
+The preview recognizes both a named coordinator profile and Hermes' active
+root-profile layout. It reports profile, shared-state, and multiplex-gateway
+drift and never writes live files.
+
+Inspect a live state directory or select a previously validated registry
+generation with:
+
+```bash
+python3 scripts/avatar_ops.py --root ~/.hermes/katara status
+python3 scripts/avatar_ops.py --root ~/.hermes/katara generations
+python3 scripts/avatar_ops.py --root ~/.hermes/katara rollback GENERATION
+```
+
+Hermes receives the `avatar_os_record` tool through the standalone plugin in
+`integrations/hermes/avatar-os`. The tool derives its Principal from Hermes'
+active profile and never accepts a caller-supplied source or operational day.
+The installer deploys and enables the plugin separately in every profile home
+so multiplexed Discord sessions retain the correct identity.
+
+The same plugin exposes `avatar_os_resource` for capability-scoped shared-state
+access. Discord profiles do not receive Hermes' generic file tool: the Registry
+declares each Agent's readable and writable paths and its allowed Discord
+toolsets. CLI administration remains the trusted maintenance surface.
 
 ## Install on a clean machine
 

@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "id": "operations",
+  "version": "1.0.0",
+  "events": {
+    "run_result": {
+      "publishers": ["automation"],
+      "fields": {
+        "job": {"type": "string"},
+        "scheduled_at": {"type": "string"},
+        "actual_at": {"type": "string"},
+        "target_operational_day": {"type": "string"},
+        "target_week": {"type": "string"},
+        "input_checkpoint": {"type": "string"},
+        "status": {"type": "string"},
+        "files_updated": {"type": "string"},
+        "delivery_status": {"type": "string"},
+        "error": {"type": "string"}
+      },
+      "required": ["job", "status"],
+      "projections": [{"target": "runs", "operation": "append"}]
+    }
+  },
+  "views": {"daily": [], "weekly": [], "state": []}
+}

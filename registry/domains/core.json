@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "id": "core",
+  "version": "1.0.0",
+  "daily_close_prompt": "sleep plan, energy 1-10, and one deviation or friction",
+  "events": {
+    "daily_log": {
+      "publishers": ["user", "katara"],
+      "fields": {
+        "gate_minutes": {"type": "number", "minimum": 0},
+        "gate_topic": {"type": "string"},
+        "gym": {"type": ["string", "boolean"]},
+        "dsa": {"type": ["string", "boolean"]},
+        "fruit": {"type": ["string", "boolean"]},
+        "protein_hits": {"type": "number", "minimum": 0},
+        "sleep": {"type": "string"},
+        "wake": {"type": "string"},
+        "energy": {"type": "number", "minimum": 1, "maximum": 10},
+        "stress": {"type": "number", "minimum": 1, "maximum": 10},
+        "soreness": {"type": "string"},
+        "deviation": {"type": "string"},
+        "friction": {"type": "string"},
+        "win": {"type": "string"}
+      },
+      "projections": [{"target": "daily", "operation": "merge"}]
+    },
+    "state_update": {
+      "publishers": ["katara"],
+      "fields": {
+        "mode": {"type": "string"},
+        "next_gate": {"type": "string"},
+        "next_fitness": {"type": "string"},
+        "next_dsa": {"type": "string"}
+      },
+      "projections": [{"target": "state", "operation": "merge"}]
+    },
+    "effort_score": {
+      "publishers": ["user", "katara"],
+      "fields": {
+        "logging_seconds": {"type": "number", "minimum": 0},
+        "reconciliation_delay_minutes": {"type": "number", "minimum": 0},
+        "corrections": {"type": "integer", "minimum": 0},
+        "prompt_responded": {"type": "boolean"},
+        "reduced_effort_score": {"type": "number", "minimum": 1, "maximum": 10}
+      },
+      "projections": [{"target": "daily", "operation": "merge"}]
+    }
+  },
+  "views": {
+    "daily": [
+      {"label": "Sleep", "path": "sleep"},
+      {"label": "Wake", "path": "wake"},
+      {"label": "Energy (1–10)", "path": "energy"},
+      {"label": "Stress (1–10)", "path": "stress"},
+      {"label": "Deviations", "path": "deviation"}
+    ],
+    "weekly": [],
+    "state": [{"label": "Mode", "path": "mode"}]
+  }
+}

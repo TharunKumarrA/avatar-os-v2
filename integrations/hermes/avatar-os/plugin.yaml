@@ -1,0 +1,7 @@
+name: avatar-os
+version: 1.0.0
+description: Authenticated Hermes adapter for recording Avatar OS domain events.
+author: Tharun
+provides_tools:
+  - avatar_os_record
+  - avatar_os_resource

@@ -100,3 +100,17 @@ For the first four weeks, append one `effort_score` event on each used day.
 reconciliation delay, corrections, cron success, proposal acceptance, and the
 1–10 reduced-effort score. Remove or simplify rituals that consistently cost
 more effort than they save.
+
+## Runtime extension contract
+
+The registry installed beside this state is the mechanical source of truth.
+Integrations authenticate a Principal and submit an envelope through
+`AvatarOS.handle`; the runtime derives the event source and operational day,
+checks the Domain schema and publisher permission, appends once, and rebuilds
+the Views atomically. Callers cannot supply their own trusted identity.
+
+Use `AvatarOS.apply(path, mode="plan")` to inspect agent and domain additions or
+removals. Commit mode first checks that the complete journal can still be
+projected, then installs a content-addressed Registry Generation. Domain
+manifests are intentionally declarative; Python extension code is not loaded
+from them.

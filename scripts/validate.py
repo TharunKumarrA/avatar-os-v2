@@ -5,13 +5,16 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
 import subprocess
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-ROLES = ("katara", "toph", "sokka", "iroh")
+SYSTEM_PATH = Path(os.environ.get("AVATAR_SYSTEM_REGISTRY", ROOT / "registry/system.json")).resolve()
+SYSTEM = json.loads(SYSTEM_PATH.read_text(encoding="utf-8"))
+AGENTS = SYSTEM["agents"]
 FORBIDDEN_DISCORD = {"terminal", "code_execution", "computer_use", "cronjob", "delegation", "image_gen", "browser", "web", "session_search"}
 errors: list[str] = []
 
@@ -24,12 +27,31 @@ def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-for role in ROLES:
-    base = ROOT / "profiles" / role
+def yaml_list_under(text: str, section: str, key: str) -> list[str]:
+    lines = text.splitlines()
+    section_index = lines.index(f"{section}:")
+    key_index = next(index for index in range(section_index + 1, len(lines)) if lines[index] == f"  {key}:")
+    result = []
+    for line in lines[key_index + 1:]:
+        if line.startswith("    - "):
+            result.append(line.removeprefix("    - ").strip())
+        elif line.strip():
+            break
+    return result
+
+
+for agent in AGENTS:
+    role = str(agent["id"])
+    base = ROOT / agent["profile"]
     for name in ("SOUL.md", "config.yaml", "distribution.yaml", "profile.yaml"):
         if not (base / name).is_file():
             fail(f"missing {base / name}")
     config = (base / "config.yaml").read_text(encoding="utf-8")
+    if "    - avatar-os" not in config:
+        fail(f"{role}: authenticated Avatar OS toolset is not enabled")
+    expected_discord = agent.get("toolsets", {}).get("discord", [])
+    if yaml_list_under(config, "platform_toolsets", "discord") != expected_discord:
+        fail(f"{role}: Discord toolsets drift from registry")
     if "hard_stop_enabled: true" not in config or "max_turns: 30" not in config:
         fail(f"{role}: loop hard stops are not enforced")
     match = re.search(r"^platform_toolsets:\n.*?^  discord:\n(?P<body>.*?)(?=^  google_chat:)", config, re.M | re.S)
@@ -48,19 +70,19 @@ for role in ROLES:
         if env_name not in distro:
             fail(f"{role}: distribution does not require {env_name}")
 
-mirrors = [
-    ("profiles/katara/skills/avatar-toph/SKILL.md", "profiles/toph/skills/avatar-toph/SKILL.md"),
-    ("profiles/katara/skills/avatar-sokka/SKILL.md", "profiles/sokka/skills/avatar-sokka/SKILL.md"),
-    ("profiles/katara/skills/avatar-iroh/SKILL.md", "profiles/iroh/skills/avatar-iroh/SKILL.md"),
-    ("profiles/katara/skills/katara-health/SKILL.md", "profiles/sokka/skills/katara-health/SKILL.md"),
-]
+mirrors = SYSTEM.get("skill_mirrors", [])
 for left, right in mirrors:
     if digest(ROOT / left) != digest(ROOT / right):
         fail(f"duplicated skill drift: {left} != {right}")
 
-subprocess.run([sys.executable, str(ROOT / "scripts/render_profiles.py"), "--check"], check=True)
-for role in ROLES:
-    soul = ROOT / "profiles" / role / "SOUL.md"
+subprocess.run([sys.executable, str(ROOT / "scripts/render_profiles.py"), "--check", "--system", str(SYSTEM_PATH)], check=True)
+subprocess.run([sys.executable, str(ROOT / "scripts/render_workflows.py"), "--check", "--system", str(SYSTEM_PATH)], check=True)
+for path in (ROOT / "integrations/hermes/avatar-os/plugin.yaml", ROOT / "integrations/hermes/avatar-os/__init__.py"):
+    if not path.is_file():
+        fail(f"missing Hermes adapter file: {path}")
+for agent in AGENTS:
+    role = str(agent["id"])
+    soul = ROOT / agent["profile"] / "SOUL.md"
     if "Avatar OS v2" not in soul.read_text(encoding="utf-8"):
         fail(f"{role}: stale product version in SOUL.md")
 
@@ -82,7 +104,7 @@ for path in ROOT.rglob("*.md"):
 template = (ROOT / "shared/avatar-os/DAILY_TEMPLATE.md").read_text(encoding="utf-8")
 if re.search(r"^- GATE: 0m$|^- DSA: No$", template, re.M):
     fail("daily template treats unknown as failure")
-close = json.loads((ROOT / "profiles/katara/cron/jobs.json").read_text(encoding="utf-8"))["jobs"][1]["prompt"]
+close = next(job for job in json.loads((ROOT / "profiles/katara/cron/jobs.json").read_text(encoding="utf-8"))["jobs"] if job["name"] == "Katara Daily Close")["prompt"]
 if "TARGET_OPERATIONAL_DAY" not in close or "01:30" not in close or "today's" in close.lower():
     fail("nightly close does not use an exact operational day")
 

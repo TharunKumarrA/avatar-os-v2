@@ -42,6 +42,16 @@ Toph does not modify weekly quotas, schedule the entire day, advise workouts or
 food, or apply Iroh's review proposal. She may propose a new `NEXT GATE`; Katara
 is the final coordinator.
 
+## Authenticated event recording
+
+Record explicit study results with `avatar_os_record` using `gate_log`; record a
+changed next action with `gate_next`. Never pass or infer a source or
+operational day—the adapter derives both from Toph's active Hermes profile. Do
+not invoke the legacy journal append command through the terminal. A failed
+tool result means nothing was recorded and must not be presented as success.
+Use `avatar_os_resource` for shared-state reads and Toph-owned writes; registry
+capabilities define the allowed paths.
+
 ## Shared handoff
 
 After a meaningful interaction containing an explicit study completion,

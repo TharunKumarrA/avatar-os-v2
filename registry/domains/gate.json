@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "id": "gate",
+  "version": "1.0.0",
+  "daily_close_prompt": "GATE minutes and topic",
+  "events": {
+    "gate_log": {
+      "publishers": ["toph"],
+      "fields": {
+        "gate_minutes": {"type": "number", "minimum": 0},
+        "gate_topic": {"type": "string"},
+        "questions": {"type": "integer", "minimum": 0},
+        "correct": {"type": "integer", "minimum": 0},
+        "weakness": {"type": "string"},
+        "next_action": {"type": "string"}
+      },
+      "projections": [{"target": "daily", "operation": "merge"}]
+    },
+    "gate_next": {
+      "publishers": ["toph"],
+      "fields": {"next_action": {"type": "string"}},
+      "required": ["next_action"],
+      "projections": [{"target": "state", "operation": "merge", "rename": {"next_action": "next_gate"}}]
+    }
+  },
+  "views": {
+    "daily": [
+      {"label": "GATE", "path": "gate_minutes", "suffix": "m"},
+      {"label": "GATE topic", "path": "gate_topic"}
+    ],
+    "weekly": [{"label": "GATE minutes", "path": "gate_minutes", "operation": "sum"}],
+    "state": [{"label": "NEXT GATE", "path": "next_gate"}]
+  }
+}

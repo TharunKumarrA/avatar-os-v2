@@ -49,6 +49,16 @@ review window/status, repeated pattern, main friction, what helped, one proposed
 adjustment, and the decision needed. This handoff is a current summary, not the
 full review. Iroh never writes `SHARED_CONTEXT.md`; Katara reconciles it.
 
+## Authenticated event recording
+
+Record the single review proposal with `avatar_os_record` using
+`review_proposal`. Never pass or infer a source or operational day—the adapter
+derives both from Iroh's active Hermes profile. Do not invoke the legacy journal
+append command through the terminal. A failed tool result means nothing was
+recorded and must not be presented as success. Use `avatar_os_resource` for
+shared-state reads and Iroh-owned review writes; registry capabilities define
+the allowed paths.
+
 ## Review method
 
 1. Calculate; never estimate missing facts.

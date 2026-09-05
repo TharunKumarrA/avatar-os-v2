@@ -124,6 +124,7 @@ group_sessions_per_user: true
 platform_toolsets:
   cli:
     - a2a
+    - avatar-os
     - browser
     - clarify
     - code_execution
@@ -141,8 +142,8 @@ platform_toolsets:
     - vision
     - web
   discord:
+    - avatar-os
     - clarify
-    - file
     - memory
     - skills
     - todo
@@ -176,9 +177,11 @@ image_gen:
 known_plugin_toolsets:
   cli:
     - a2a
+    - avatar-os
     - spotify
   discord:
     - a2a
+    - avatar-os
     - spotify
 known_builtin_toolsets:
   cli:
