@@ -52,7 +52,7 @@ def build_plan(system_path: Path, hermes_root: Path) -> dict[str, Any]:
             profiles[agent_id] = "keep-active"
         else:
             profiles[agent_id] = "install"
-    state_root = hermes_root / coordinator
+    state_root = hermes_root / "avatar-os"
     source_registry = system_path.parent
     installed_registry = state_root / "registry"
     if not state_root.exists():

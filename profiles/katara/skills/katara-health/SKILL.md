@@ -18,11 +18,11 @@ illness, pain, or health-status requests.
 
 Read:
 
-1. `~/.hermes/katara/PROFILE.md`
-2. `~/.hermes/katara/PLAN.md`
-3. `~/.hermes/katara/STATE.md`
-4. `~/.hermes/katara/SHARED_CONTEXT.md`
-5. `~/.hermes/katara/handoffs/sokka.md`
+1. `~/.hermes/avatar-os/PROFILE.md`
+2. `~/.hermes/avatar-os/PLAN.md`
+3. `~/.hermes/avatar-os/STATE.md`
+4. `~/.hermes/avatar-os/SHARED_CONTEXT.md`
+5. `~/.hermes/avatar-os/handoffs/sokka.md`
 6. today's daily log
 7. the previous daily log when recovery context matters
 
@@ -83,7 +83,7 @@ Use this compact order:
 
 When this procedure runs under Sokka and the user supplies explicit health,
 food, sleep, workout, readiness, completion, skip, or deviation evidence,
-update `~/.hermes/katara/handoffs/sokka.md` according to the shared
+update `~/.hermes/avatar-os/handoffs/sokka.md` according to the shared
 handoff protocol. Katara, not Sokka, reconciles canonical daily and weekly
 totals and writes `SHARED_CONTEXT.md`.
 

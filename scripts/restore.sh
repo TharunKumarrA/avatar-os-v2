@@ -5,6 +5,7 @@ hermes_root="${HERMES_HOME:-$HOME/.hermes}"
 script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 repo_root=$(cd "$script_dir/.." && pwd)
 system_registry="${AVATAR_SYSTEM_REGISTRY:-$repo_root/registry/system.json}"
+state_root="${AVATAR_OS_STATE_ROOT:-$hermes_root/avatar-os}"
 backup=$(cd "$1" && pwd)
 stamp=$(date +%Y%m%dT%H%M%S)
 recovery="$hermes_root/backups/avatar-os/pre-restore-$stamp"
@@ -15,11 +16,14 @@ while IFS= read -r profile; do
     cp -R "$backup/profiles/$profile" "$hermes_root/profiles/$profile"
   fi
 done < <(python3 "$repo_root/scripts/registry.py" agents --system "$system_registry")
-if [[ -e "$backup/katara-snapshot" ]]; then
-  [[ -e "$hermes_root/katara" ]] && mv "$hermes_root/katara" "$recovery/katara"
-  cp -R "$backup/katara-snapshot" "$hermes_root/katara"
+if [[ -e "$backup/avatar-os-snapshot" ]]; then
+  [[ -e "$state_root" ]] && mv "$state_root" "$recovery/avatar-os"
+  cp -R "$backup/avatar-os-snapshot" "$state_root"
+elif [[ -e "$backup/katara-snapshot" ]]; then
+  [[ -e "$state_root" ]] && mv "$state_root" "$recovery/avatar-os"
+  cp -R "$backup/katara-snapshot" "$state_root"
 elif [[ -e "$backup/katara" ]]; then
-  [[ -e "$hermes_root/katara" ]] && mv "$hermes_root/katara" "$recovery/katara"
-  cp -R "$backup/katara" "$hermes_root/katara"
+  [[ -e "$state_root" ]] && mv "$state_root" "$recovery/avatar-os"
+  cp -R "$backup/katara" "$state_root"
 fi
 echo "Restore complete. Pre-restore state: $recovery"

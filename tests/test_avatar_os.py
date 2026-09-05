@@ -424,15 +424,15 @@ exit 0
         with tempfile.TemporaryDirectory() as temp:
             temp_path = Path(temp)
             home, backup = temp_path / "home", temp_path / "backup"
-            (home / "katara").mkdir(parents=True)
-            (home / "katara/marker").write_text("old")
+            (home / "avatar-os").mkdir(parents=True)
+            (home / "avatar-os/marker").write_text("old")
             (backup / "katara-snapshot").mkdir(parents=True)
             (backup / "katara-snapshot/marker").write_text("restored")
             env = dict(os.environ, HERMES_HOME=str(home))
             result = subprocess.run([str(ROOT / "scripts/restore.sh"), str(backup)], cwd=ROOT, env=env, text=True, capture_output=True)
             self.assertEqual(0, result.returncode, result.stderr)
-            self.assertEqual("restored", (home / "katara/marker").read_text())
-            self.assertTrue(list((home / "backups/avatar-os").glob("pre-restore-*/katara/marker")))
+            self.assertEqual("restored", (home / "avatar-os/marker").read_text())
+            self.assertTrue(list((home / "backups/avatar-os").glob("pre-restore-*/avatar-os/marker")))
 
     def test_runtime_validator_rejects_shared_tokens(self):
         with tempfile.TemporaryDirectory() as temp:
@@ -470,7 +470,7 @@ class RegistryLifecycleTests(unittest.TestCase):
             home = Path(temp) / "hermes"
             (home / "profiles/katara").mkdir(parents=True)
             (home / "profiles/toph").mkdir(parents=True)
-            (home / "katara").mkdir(parents=True)
+            (home / "avatar-os").mkdir(parents=True)
             (home / "config.yaml").write_text(
                 "gateway:\n  multiplex_profiles: true\n"
                 "  multiplex_profile_allowlist:\n    - toph\ntimezone: Asia/Kolkata\n"

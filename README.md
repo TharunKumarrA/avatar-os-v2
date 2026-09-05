@@ -95,9 +95,9 @@ Inspect a live state directory or select a previously validated registry
 generation with:
 
 ```bash
-python3 scripts/avatar_ops.py --root ~/.hermes/katara status
-python3 scripts/avatar_ops.py --root ~/.hermes/katara generations
-python3 scripts/avatar_ops.py --root ~/.hermes/katara rollback GENERATION
+python3 scripts/avatar_ops.py --root ~/.hermes/avatar-os status
+python3 scripts/avatar_ops.py --root ~/.hermes/avatar-os generations
+python3 scripts/avatar_ops.py --root ~/.hermes/avatar-os rollback GENERATION
 ```
 
 Hermes receives the `avatar_os_record` tool through the standalone plugin in
@@ -134,7 +134,7 @@ To seed the curated user profile and durable memory into all four profiles:
 
 The installer refuses implicit overwrites. It installs Katara, Toph, Sokka, and
 Iroh as named profiles, copies the shared source of truth to
-`~/.hermes/katara`, and makes Katara the active profile. Use `--dry-run` for
+`~/.hermes/avatar-os`, and makes Katara the active profile. Use `--dry-run` for
 preflight only, `--resume` after a partial installation, or `--repair` to back
 up and reinstall distributions while preserving and migrating personal shared
 state. Every mutating run stores recovery material under

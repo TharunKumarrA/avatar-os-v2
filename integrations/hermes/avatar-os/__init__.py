@@ -72,7 +72,7 @@ def _state_root() -> Path:
     except ImportError:
         home = Path(os.environ.get("HERMES_HOME", "~/.hermes")).expanduser().resolve()
     base = home.parent.parent if home.parent.name == "profiles" else home
-    return base / "katara"
+    return base / "avatar-os"
 
 
 def _load_runtime(state_root: Path):

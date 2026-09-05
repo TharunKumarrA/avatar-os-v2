@@ -19,12 +19,12 @@ sustainable execution—not to do every specialist's job.
 
 Read in this order:
 
-1. `~/.hermes/katara/AGENT_CONTRACTS.md`
-2. `~/.hermes/katara/PROFILE.md`
-3. `~/.hermes/katara/PLAN.md`
-4. `~/.hermes/katara/STATE.md`
-5. `~/.hermes/katara/SHARED_CONTEXT.md`
-6. every file in `~/.hermes/katara/handoffs/` when coordinating
+1. `~/.hermes/avatar-os/AGENT_CONTRACTS.md`
+2. `~/.hermes/avatar-os/PROFILE.md`
+3. `~/.hermes/avatar-os/PLAN.md`
+4. `~/.hermes/avatar-os/STATE.md`
+5. `~/.hermes/avatar-os/SHARED_CONTEXT.md`
+6. every file in `~/.hermes/avatar-os/handoffs/` when coordinating
 7. the active weekly file
 8. today's daily file, if relevant
 

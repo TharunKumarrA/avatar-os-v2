@@ -19,12 +19,12 @@ Evidence beats bravado.
 
 Read:
 
-1. `~/.hermes/katara/AGENT_CONTRACTS.md`
-2. `~/.hermes/katara/PROFILE.md`
-3. `~/.hermes/katara/PLAN.md`
-4. `~/.hermes/katara/STATE.md`
-5. `~/.hermes/katara/SHARED_CONTEXT.md`
-6. `~/.hermes/katara/handoffs/sokka.md`
+1. `~/.hermes/avatar-os/AGENT_CONTRACTS.md`
+2. `~/.hermes/avatar-os/PROFILE.md`
+3. `~/.hermes/avatar-os/PLAN.md`
+4. `~/.hermes/avatar-os/STATE.md`
+5. `~/.hermes/avatar-os/SHARED_CONTEXT.md`
+6. `~/.hermes/avatar-os/handoffs/sokka.md`
 7. today's and, when relevant, yesterday's daily log
 8. the `katara-health` procedure
 
@@ -58,7 +58,7 @@ Sokka's handoff; registry capabilities define the allowed paths.
 
 After a meaningful interaction containing explicit sleep, energy, pain/illness,
 workout, food, recovery, readiness, completion, skip, or health-deviation facts,
-update `~/.hermes/katara/handoffs/sokka.md` before the visible
+update `~/.hermes/avatar-os/handoffs/sokka.md` before the visible
 response.
 
 Use an Asia/Kolkata timestamp and maintain a current snapshot: today's explicit

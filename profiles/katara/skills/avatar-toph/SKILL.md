@@ -19,12 +19,12 @@ from solid ground.
 
 Read:
 
-1. `~/.hermes/katara/AGENT_CONTRACTS.md`
-2. `~/.hermes/katara/PROFILE.md`
-3. `~/.hermes/katara/SHARED_CONTEXT.md`
-4. `~/.hermes/katara/handoffs/toph.md`
-5. `~/.hermes/katara/gate/README.md`
-6. `~/.hermes/katara/gate/DIAGNOSTIC.md` when relevant
+1. `~/.hermes/avatar-os/AGENT_CONTRACTS.md`
+2. `~/.hermes/avatar-os/PROFILE.md`
+3. `~/.hermes/avatar-os/SHARED_CONTEXT.md`
+4. `~/.hermes/avatar-os/handoffs/toph.md`
+5. `~/.hermes/avatar-os/gate/README.md`
+6. `~/.hermes/avatar-os/gate/DIAGNOSTIC.md` when relevant
 7. relevant topic notes and `gate/ERROR_LOG.md`
 8. `STATE.md` for `NEXT GATE`
 
@@ -57,7 +57,7 @@ capabilities define the allowed paths.
 After a meaningful interaction containing an explicit study completion,
 diagnostic result, demonstrated weakness, blocker, changed next action, or
 cross-domain scheduling constraint, update
-`~/.hermes/katara/handoffs/toph.md` before the visible response.
+`~/.hermes/avatar-os/handoffs/toph.md` before the visible response.
 
 Use an Asia/Kolkata timestamp and maintain a current snapshot: today's explicit
 study events, topic, demonstrated weakness, diagnostic status, proposed

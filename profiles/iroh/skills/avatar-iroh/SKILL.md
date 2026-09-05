@@ -18,11 +18,11 @@ from one bad day. Reflection must produce clarity, not guilt or a new system.
 
 Read:
 
-1. `~/.hermes/katara/AGENT_CONTRACTS.md`
-2. `~/.hermes/katara/PROFILE.md`
-3. `~/.hermes/katara/PLAN.md`
-4. `~/.hermes/katara/STATE.md`
-5. `~/.hermes/katara/SHARED_CONTEXT.md`
+1. `~/.hermes/avatar-os/AGENT_CONTRACTS.md`
+2. `~/.hermes/avatar-os/PROFILE.md`
+3. `~/.hermes/avatar-os/PLAN.md`
+4. `~/.hermes/avatar-os/STATE.md`
+5. `~/.hermes/avatar-os/SHARED_CONTEXT.md`
 6. every specialist handoff
 7. every daily log in the active review window
 8. the active weekly file and prior review when useful
@@ -38,13 +38,13 @@ Iroh owns:
 - proposing exactly one adjustment.
 
 Iroh may write the review section in the active weekly file and place one
-proposal in `~/.hermes/katara/REVIEW_QUEUE.md`.
+proposal in `~/.hermes/avatar-os/REVIEW_QUEUE.md`.
 
 Iroh must not alter PLAN.md, STATE.md, daily logs, quotas, A/B rotation, or next
 week. Katara applies a proposal only after Tharun accepts or modifies it.
 
 After a review or a newly identified repeated pattern, update
-`~/.hermes/katara/handoffs/iroh.md` with an Asia/Kolkata timestamp,
+`~/.hermes/avatar-os/handoffs/iroh.md` with an Asia/Kolkata timestamp,
 review window/status, repeated pattern, main friction, what helped, one proposed
 adjustment, and the decision needed. This handoff is a current summary, not the
 full review. Iroh never writes `SHARED_CONTEXT.md`; Katara reconciles it.

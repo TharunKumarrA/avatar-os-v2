@@ -24,6 +24,7 @@ repo_root=$(cd "$script_dir/.." && pwd)
 system_registry="${AVATAR_SYSTEM_REGISTRY:-$repo_root/registry/system.json}"
 hermes_root="${HERMES_HOME:-$HOME/.hermes}"
 profiles_root="$hermes_root/profiles"
+state_root="${AVATAR_OS_STATE_ROOT:-$hermes_root/avatar-os}"
 backup_root="$hermes_root/backups/avatar-os"
 run_id=$(date +%Y%m%dT%H%M%S)
 transaction="$backup_root/$run_id"
@@ -90,6 +91,7 @@ rollback() {
       mv "$transaction/profile-plugins/$profile/avatar-os" "$profiles_root/$profile/plugins/avatar-os"
     fi
   done
+  [[ -n "$coordinator" && -d "$profiles_root/$coordinator" ]] && hermes profile use "$coordinator" >/dev/null 2>&1 || true
   set -u
   echo "Recovery material: $transaction" >&2
   exit "$status"
@@ -99,7 +101,7 @@ load_registry
 trap rollback EXIT
 existing=()
 for profile in "${profiles[@]}"; do [[ -e "$profiles_root/$profile" ]] && existing+=("$profile"); done
-[[ -e "$hermes_root/katara" ]] && existing+=("shared-state")
+[[ -e "$state_root" ]] && existing+=("shared-state")
 if [[ "$mode" == "install" && ${#existing[@]} -gt 0 ]]; then
   echo "Existing components: ${existing[*]}. Use --resume or --repair." >&2
   exit 1
@@ -112,11 +114,12 @@ if [[ "$dry_run" == true ]]; then
     [[ "$mode" == "repair" ]] && action=backup-and-reinstall
     echo "$profile: $action"
   done
-  [[ -e "$hermes_root/katara" ]] && echo "shared state: preserve and migrate" || echo "shared state: initialize"
+  [[ -e "$state_root" ]] && echo "shared state: preserve and migrate" || echo "shared state: initialize"
   trap - EXIT
   exit 0
 fi
 
+hermes profile use default
 mkdir -p "$profiles_root" "$transaction"
 for index in "${!profiles[@]}"; do
   profile=${profiles[$index]}
@@ -155,15 +158,15 @@ for profile in "${profiles[@]}"; do
   hermes -p "$profile" plugins enable avatar-os --no-allow-tool-override
 done
 
-if [[ ! -e "$hermes_root/katara" ]]; then
-  mkdir -p "$hermes_root/katara"
-  cp -R "$repo_root/shared/avatar-os/." "$hermes_root/katara/"
-  mkdir -p "$hermes_root/katara/registry"
-  cp -R "$repo_root/registry/." "$hermes_root/katara/registry/"
+if [[ ! -e "$state_root" ]]; then
+  mkdir -p "$state_root"
+  cp -R "$repo_root/shared/avatar-os/." "$state_root/"
+  mkdir -p "$state_root/registry"
+  cp -R "$repo_root/registry/." "$state_root/registry/"
 else
-  mkdir -p "$transaction/katara-snapshot"
-  cp -R "$hermes_root/katara/." "$transaction/katara-snapshot/"
-  "$repo_root/scripts/migrate.sh" "$hermes_root/katara"
+  mkdir -p "$transaction/avatar-os-snapshot"
+  cp -R "$state_root/." "$transaction/avatar-os-snapshot/"
+  "$repo_root/scripts/migrate.sh" "$state_root"
 fi
 
 if [[ "$with_memory" == true ]]; then
