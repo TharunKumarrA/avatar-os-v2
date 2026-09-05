@@ -1,6 +1,6 @@
 # AVATAR OS — FOUR-AGENT CONTRACT
 
-Updated: 2026-09-02
+Source: Repository seed
 
 ## Roster
 

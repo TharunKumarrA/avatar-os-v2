@@ -149,7 +149,7 @@ class RuntimeInterfaceTests(unittest.TestCase):
 
     def test_new_reading_domain_is_added_without_kernel_changes(self):
         system = json.loads((ROOT / "registry/system.json").read_text())
-        system["domains"] = [str(ROOT / "examples/extensions/reading/manifest.json")]
+        system["domains"] = [str(ROOT / "registry/domains/reading.json")]
         for agent in system["agents"]:
             agent["domains"] = ["reading"]
         system_path = self.root / "reading-system.json"
@@ -230,7 +230,7 @@ class RuntimeInterfaceTests(unittest.TestCase):
             adapters=[self.adapter],
         )
         desired = baseline
-        desired["domains"].append(str(ROOT / "examples/extensions/reading/manifest.json"))
+        desired["domains"].append(str(ROOT / "registry/domains/reading.json"))
         for agent in desired["agents"]:
             if agent["id"] in {"katara", "iroh"}:
                 agent["domains"].append("reading")
@@ -282,7 +282,7 @@ class RuntimeInterfaceTests(unittest.TestCase):
             avatar.compile_registry(path)
 
     def test_registry_rejects_unsupported_projection_before_open(self):
-        manifest = json.loads((ROOT / "examples/extensions/reading/manifest.json").read_text())
+        manifest = json.loads((ROOT / "registry/domains/reading.json").read_text())
         manifest["events"]["reading.session_logged.v1"]["projections"][0]["operation"] = "execute"
         manifest_path = self.root / "bad-domain.json"
         manifest_path.write_text(json.dumps(manifest))

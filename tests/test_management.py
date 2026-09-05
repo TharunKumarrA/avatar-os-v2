@@ -27,7 +27,7 @@ class WorkflowTests(unittest.TestCase):
             base = Path(temp)
             (base / "registry/domains").mkdir(parents=True)
             (base / "profiles/katara").mkdir(parents=True)
-            reading = json.loads((ROOT / "examples/extensions/reading/manifest.json").read_text())
+            reading = json.loads((ROOT / "registry/domains/reading.json").read_text())
             (base / "registry/domains/reading.json").write_text(json.dumps(reading))
             workflow = {
                 "schema_version": 1,
